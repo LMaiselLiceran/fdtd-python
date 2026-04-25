@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment
+.env
+venv/
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ignore generated output
+*.gif
+*.png
+*.jpg
+
+# but keep the assets folder for README embeds
+!assets/*.gif
+!assets/*.png
+!assets/*.jpg
