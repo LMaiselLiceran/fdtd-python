@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation, PillowWriter
+from matplotlib.animation import FuncAnimation, FFMpegWriter
 
 def animate_field(history, grid, interval=20, dt_plot=None, ylim=None, filename=None):
     """
@@ -61,10 +61,10 @@ def animate_field(history, grid, interval=20, dt_plot=None, ylim=None, filename=
     anim = FuncAnimation(fig, update, frames=len(history), interval=interval, blit=True)
     plt.show()
 
-    # Possible save the animation
+    # Possibly save the animation
     if filename is not None:
-        print(f"Saving animation to {filename}...")
-        anim.save(filename, writer=PillowWriter(fps=60))
+        print(f"Saving animation to ../assets/{filename}...")
+        anim.save("../assets/" + filename, writer=FFMpegWriter(fps=60), dpi=300)
         print("Animation saved.")
 
     return anim

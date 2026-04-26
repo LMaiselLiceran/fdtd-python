@@ -23,8 +23,10 @@ Thumbs.db
 *.gif
 *.png
 *.jpg
+*.mp4
 
 # but keep the assets folder for README embeds
 !assets/*.gif
 !assets/*.png
 !assets/*.jpg
+!assets/*.mp4
