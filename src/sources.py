@@ -5,10 +5,10 @@ def gaussian_pulse(t, t0, sigma, amplitude=1.0):
     Returns the value of a Gaussian pulse at time t
     
     Parameters:
-    - t: time at which the pulse is evaluated
-    - t0: time at which the pulse is maximal
-    - sigma: width of the pulse (in time)
-    - amplitude (optional): height of the pulse at t0
+        t               : time at which the pulse is evaluated
+        t0              : time at which the pulse is maximal
+        sigma           : width of the pulse (in time)
+        amplitude (opt) : height of the pulse at t0
     """
     return amplitude * np.exp(-((t - t0) ** 2) / (2 * sigma ** 2))
 

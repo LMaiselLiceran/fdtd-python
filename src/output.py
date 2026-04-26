@@ -63,8 +63,8 @@ def animate_field(history, grid, interval=20, dt_plot=None, ylim=None, filename=
 
     # Possibly save the animation
     if filename is not None:
-        print(f"Saving animation to ../assets/{filename}...")
-        anim.save("../assets/" + filename, writer=FFMpegWriter(fps=60), dpi=300)
+        print(f"Saving animation to {filename}...")
+        anim.save(filename, writer=FFMpegWriter(fps=60), dpi=300)
         print("Animation saved.")
 
     return anim
