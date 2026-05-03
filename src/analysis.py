@@ -1,34 +1,50 @@
 import numpy as np
+from dataclasses import dataclass
 
-def find_peak_position(field_snapshot, dx, x_min=None, x_max=None):
+@dataclass
+class PeakProperties:
+    position  : float   # physical position in metres
+    amplitude : float   # signed amplitude
+    index     : float   # sub-cell index (useful for debugging)
+
+def find_peak(field_snapshot, dx, x_min=None, x_max=None):
     """
-    Returns the physical position of the maximum of the field snapshot
+    Returns the physical position of the maximum of the field in a spatial window.
+    Uses quadratic interpolation for sub-cell accuracy.
 
     Parameters:
         field_snapshot : 1D numpy array of field values
         dx             : spatial step in meters
         x_min (opt)    : left boundary of search window in meters
         x_max (opt)    : right boundary of search window in meters
+
+    Returns:
+        PeakProperties dataclass with position, amplitude, and index
     """
     i_min = round(x_min / dx) if x_min is not None else 0
     i_max = round(x_max / dx) if x_max is not None else len(field_snapshot)
-
     window  = field_snapshot[i_min:i_max]
+
     i_peak = np.argmax(np.abs(window))
 
     # Sub-cell interpolation using quadratic fit around peak
     # (only if peak is not at the edge of the window)
-    if 0 < i_peak < len(window) - 1:
+    if 0 < i_peak < (len(window) - 1):
         y0 = np.abs(window[i_peak - 1])
         y1 = np.abs(window[i_peak])
         y2 = np.abs(window[i_peak + 1])
         # Quadratic interpolation: offset from peak cell
         offset = 0.5 * (y0 - y2) / (y0 - 2*y1 + y2)
         i_peak_interp = i_peak + offset
+        amplitude = window[i_peak] + offset * (window[i_peak+1] - window[i_peak-1]) / 2
     else:
         i_peak_interp = i_peak
+        amplitude = window[i_peak]
 
-    return (i_min + i_peak_interp) * dx
+    index = i_min + i_peak_interp
+    position = index * dx
+
+    return PeakProperties(position=position, amplitude=amplitude, index=index)
 
 def measure_wave_speed(field_history, dx, dt_snapshot, x_min=None, x_max=None):
     """
@@ -45,7 +61,7 @@ def measure_wave_speed(field_history, dx, dt_snapshot, x_min=None, x_max=None):
         positions   : array of peak positions at each frame
         times       : array of times corresponding to each frame
     """
-    positions = np.array([find_peak_position(snap, dx, x_min, x_max) for snap in field_history])
+    positions = np.array([find_peak(snap, dx, x_min, x_max).position for snap in field_history])
     times     = np.arange(len(field_history)) * dt_snapshot
 
     # Linear fit with covariance: position = c * time + offset
