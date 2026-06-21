@@ -21,9 +21,9 @@ def find_peak(field_snapshot, dx, x_min=None, x_max=None):
     Returns:
         PeakProperties dataclass with position, amplitude, and index
     """
-    i_min = round(x_min / dx) if x_min is not None else 0
-    i_max = round(x_max / dx) if x_max is not None else len(field_snapshot)
-    window  = field_snapshot[i_min:i_max]
+    i_min  = round(x_min / dx) if x_min is not None else 0
+    i_max  = round(x_max / dx) if x_max is not None else len(field_snapshot)
+    window = field_snapshot[i_min:i_max]
 
     i_peak = np.argmax(np.abs(window))
 
@@ -46,15 +46,42 @@ def find_peak(field_snapshot, dx, x_min=None, x_max=None):
 
     return PeakProperties(position=position, amplitude=amplitude, index=index)
 
+def find_peak_in_window(field_history, dx, dt_snapshot, t_measure, x_min=None, x_max=None):
+    """
+    Finds the peak amplitude of a pulse in a spatial window at a specific measurement time
+
+    Parameters:
+        field_history : list of field snapshots saved at intervals dt_snapshot
+        dx            : spatial step in meters
+        dt_snapshot   : time interval between snapshots in seconds
+        t_measure     : physical time at which to measure in seconds
+        x_min         : left boundary of search window in metres (optional)
+        x_max         : right boundary of search window in metres (optional)
+
+    Returns:
+        PeakProperties dataclass with position, amplitude, and index
+    """
+
+    i_frame = round(t_measure / dt_snapshot)
+
+    if (i_frame > len(field_history)):
+        raise ValueError(
+            f"t_measure={t_measure} exceeds simulation duration. "
+            f"Maximum frame index is {len(history)-1}, "
+            f"corresponding to t={len(history)*dt_plot:.3e} s."
+        )
+
+    return find_peak(field_history[i_frame], dx, x_min, x_max)
+
 def measure_wave_speed(field_history, dx, dt_snapshot, x_min=None, x_max=None):
     """
     Measures the numerical wave speed by tracking the peak position over time
     and fitting a line to position vs time
 
-    Parameters
-        history      : list of field snapshots saved at intervals dt_snapshot
-        dx           : spatial step in meters
-        dt_snapshot  : time interval between snapshots in seconds
+    Parameters:
+        field_history : list of field snapshots saved at intervals dt_snapshot
+        dx            : spatial step in meters
+        dt_snapshot   : time interval between snapshots in seconds
 
     Returns:
         c_numerical : measured wave speed in m/s
