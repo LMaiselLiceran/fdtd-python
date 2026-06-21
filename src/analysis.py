@@ -7,6 +7,26 @@ class PeakProperties:
     amplitude : float   # signed amplitude
     index     : float   # sub-cell index (useful for debugging)
 
+class FieldProbe:
+    """
+    Records the field value at a fixed spatial position over time.
+    
+    Parameters:
+        grid     : Grid object
+        position : physical position in metres
+    """
+    def __init__(self, grid, position):
+        self.index  = round(position / grid.dx)
+        self.record = []
+
+    def measure(self, grid):
+        """Record the current field value at the probe position"""
+        self.record.append(grid.Ez[self.index])
+
+    def get_series(self):
+        """Return the recorded time series as a numpy array"""
+        return np.array(self.record)
+
 def find_peak(field_snapshot, dx, x_min=None, x_max=None):
     """
     Returns the physical position of the maximum of the field in a spatial window.
@@ -68,7 +88,7 @@ def find_peak_in_window(field_history, dx, dt_snapshot, t_measure, x_min=None, x
         raise ValueError(
             f"t_measure={t_measure} exceeds simulation duration. "
             f"Maximum frame index is {len(history)-1}, "
-            f"corresponding to t={len(history)*dt_plot:.3e} s."
+            f"corresponding to t={len(history)*dt_snapshot:.3e} s."
         )
 
     return find_peak(field_history[i_frame], dx, x_min, x_max)
@@ -97,3 +117,43 @@ def measure_wave_speed(field_history, dx, dt_snapshot, x_min=None, x_max=None):
     c_error     = np.sqrt(cov[0, 0])
 
     return c_numerical, c_error, positions, times
+
+def compute_transfer_function(incident_series, transmitted_series, dt_sample, window=True):
+    """
+    Computes the frequency-domain transfer function H(f) = E_trans(f) / E_inc(f).
+
+    Parameters:
+        incident_series    : 1D array of incident field values at a fixed point
+        transmitted_series : 1D array of transmitted field values at a fixed point
+        window             : if True, apply a Hanning window before FFT to reduce
+                             spectral leakage (default: True)
+
+    Returns:
+        freqs   : array of frequencies in Hz
+        H_amp   : amplitude of transfer function |H(f)|
+        H_phase : phase of transfer function angle(H(f)) in radians
+    """
+
+    n = len(incident_series)
+
+    if (len(transmitted_series) != n):
+        raise ValueError("incident_series and transmitted_series must have the same length.")
+
+    if window:
+        w = np.hanning(n)
+        incident_series    = incident_series    * w
+        transmitted_series = transmitted_series * w
+
+    # FFT both series
+    E_inc   = np.fft.rfft(incident_series)
+    E_trans = np.fft.rfft(transmitted_series)
+    freqs   = np.fft.rfftfreq(n, d=dt_sample)
+
+    # Avoid division by near-zero
+    threshold = 1e-14 * np.max(np.abs(E_inc))
+    mask      = np.abs(E_inc) > threshold
+
+    H = np.zeros_like(E_inc, dtype=complex)
+    H[mask] = E_trans[mask] / E_inc[mask]
+
+    return freqs, np.abs(H), np.angle(H), E_inc, E_trans
