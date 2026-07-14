@@ -118,12 +118,12 @@ Open any notebook in `notebooks/` and run all cells.
 
 ## Roadmap
 
-- [ ] Notebook 05: EM shielding of a conducting enclosure
-- [ ] Notebook 06: Energy conservation validation
-- [ ] Notebook 07: Impedance matching and quarter-wave layers
-- [ ] 2D FDTD extension: wave scattering off a PEC cylinder
-- [ ] Perfectly Matched Layer (PML) absorbing boundaries
-- [ ] Total-Field/Scattered-Field (TF/SF) plane wave injection
+- Notebook 05: EM shielding of a conducting enclosure
+- Notebook 06: Energy conservation validation
+- Notebook 07: Impedance matching and quarter-wave layers
+- 2D FDTD extension: wave scattering off a PEC cylinder
+- Perfectly Matched Layer (PML) absorbing boundaries
+- Total-Field/Scattered-Field (TF/SF) plane wave injection
 
 ---
 
