@@ -73,7 +73,7 @@ gives the full frequency response of the cavity in one simulation run.
 
 The transmission spectrum is compared to the analytical **Airy function**:
 
-$$|H(f)|^2 = \frac{(1-R)^2}{(1-R)^2 + 4R\sin^2\!\left(\dfrac{2\pi f L_\text{slab}\sqrt{\varepsilon_r}}{c_0}\right)}$$
+$$|H(f)|^2 = \frac{(1-R)^2}{(1-R)^2 + 4R\sin^2\bigg(\dfrac{2\pi f L_\text{slab}\sqrt{\varepsilon_r}}{c_0}\bigg)}$$
 
 Resonance peaks appear at the predicted frequencies $f_m = m c_0 / (2 L_\text{slab} \sqrt{\varepsilon_r})$ with excellent agreement between FDTD and the analytical model.
 
