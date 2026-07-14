@@ -28,7 +28,7 @@ The Finite-Difference Time-Domain method discretizes Maxwell's curl equations on
 
 ## Notebooks
 
-### 01 — Basic wave propagation
+### 01. Basic wave propagation
 
 Demonstrates the core solver: multiple Gaussian pulse sources propagating through a heterogeneous medium with two material slabs. Shows pulse slowing inside the dielectric, partial reflection and transmission at interfaces, and clean absorption at both boundaries by the Mur ABC.
 
@@ -36,7 +36,7 @@ Demonstrates the core solver: multiple Gaussian pulse sources propagating throug
 
 ---
 
-### 02 — Numerical dispersion analysis
+### 02. Numerical dispersion analysis
 
 Verifies that the Yee scheme is correctly **second-order accurate** by measuring the numerical wave speed $c_\text{num}$ as a function of grid resolution $\Delta x$ and comparing to the analytical wave speed.
 
@@ -48,7 +48,7 @@ The standard FDTD rule of thumb of **10–20 cells per pulse width** is verified
 
 ---
 
-### 03 — Reflection and transmission coefficients
+### 03. Reflection and transmission coefficients
 
 Verifies the analytical **Fresnel coefficients** at a vacuum-dielectric interface for normal incidence:
 
@@ -63,7 +63,7 @@ Key results:
 
 ---
 
-### 04 — Fabry-Pérot cavity and frequency domain analysis
+### 04. Fabry-Pérot cavity and frequency domain analysis
 
 Demonstrates **broadband FDTD simulation and Fourier analysis**, the standard workflow in RF engineering. A single Gaussian pulse excites all frequencies simultaneously. The transfer function
 
