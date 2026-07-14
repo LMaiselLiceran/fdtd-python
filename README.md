@@ -56,8 +56,6 @@ $$r = \frac{1 - \sqrt{\varepsilon_\mathrm{r}}}{1 + \sqrt{\varepsilon_\mathrm{r}}
 
 A Gaussian pulse is incident on an interface at $x = 0.5$ m. The reflected and transmitted pulse amplitudes are measured at fixed positions and compared to the analytical predictions for seven values of $\varepsilon_\mathrm{r} \in [1.5, 10]$.
 
-![Fresnel coefficients](assets/03_fresnel_coefficients.png)
-
 Key results:
 - Reflected pulse is correctly **inverted** ($r < 0$) for $\varepsilon_\mathrm{r} > 1$, consistent with the phase inversion at a low-to-high impedance interface
 - Energy conservation $|r|^2 + \sqrt{\varepsilon_r}|t|^2 = 1$ is satisfied to high accuracy for all cases
